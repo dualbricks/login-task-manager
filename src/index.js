@@ -1,16 +1,18 @@
-const express = require('express')
-require('./db/mongoose')
+const app = require('./app')
+const hbs = require('hbs')
+const path = require('path')
+const webHandler = require('./webhandler/web')
+//Setting view engine
 
-const userRouter = require('./routers/user')
-const taskRouter = require('./routers/task')
+const viewsPath = path.join(__dirname, './templates/views')
+const partialsPath = path.join(__dirname, './templates/partials')
+app.set('view engine', 'hbs')
+app.set('views',viewsPath)
+hbs.registerPartials(partialsPath)
+app.use(webHandler)
 
-const app = express()
+
 const port = process.env.PORT || 3000
-
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
-app.use(userRouter)
-app.use(taskRouter)
 
 app.listen(port, ()=>{
     console.log('Server is up on port '+ port)
